@@ -9,4 +9,10 @@
 .ant-layout-content {
   background-color: #fff;
   padding: 60px 120px;
+  text-align: center;
+}
+
+.ant-btn-primary {
+  background-color: #5c60c8;
+  border-color: #5c60c8;
 }

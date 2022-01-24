@@ -34,8 +34,8 @@ function Home(): JSX.Element {
   ];
 
   return (
-    <div>
-      <Button type="primary">Add friend</Button>
+    <div style={{textAlign: 'start'}}>
+      <Button type="primary" href="/create">Add friend</Button>
       <Grid columns={columns} rows={data.animals}>
         <Table />
         <TableHeaderRow />
