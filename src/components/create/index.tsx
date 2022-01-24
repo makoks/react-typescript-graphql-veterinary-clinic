@@ -1,25 +1,59 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 
-import { Space, Button, Form, Input, InputNumber, Radio, Select } from 'antd';
+import {
+  Space,
+  Button,
+  Alert,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Select
+} from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 
 import OWNERS_LIST from '../../graphql/queries/ownersList';
+import UPDATE_ANIMAL from '../../graphql/migrations/updateAnimal';
+
 import { Gender } from '../../__generated__/globalTypes';
 import { Owners } from '../../graphql/queries/__generated__/Owners';
+import {
+  UpdateAnimal,
+  UpdateAnimalVariables
+} from '../../graphql/migrations/__generated__/UpdateAnimal';
 
 function Create(): JSX.Element {
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
+
+  const [form] = Form.useForm();
+
   const {
     loading: ownersLoading,
     error: ownersError,
     data: ownersData
   } = useQuery<Owners>(OWNERS_LIST);
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
+  const [createAnimal, {
+    loading: createLoading,
+    error: createError
+  }] = useMutation<UpdateAnimal, UpdateAnimalVariables>(UPDATE_ANIMAL, {
+    onCompleted(data) {
+      if (!data.updateAnimal.success) {
+        setErrorMessage(data.updateAnimal.message);
+        return;
+      }
+      setSuccessMessage(data.updateAnimal.message);
+      form.resetFields();
+    }
+  });
 
-  if (ownersError) return <div>Something went wrong...</div>;
+  const onFinish = (values: UpdateAnimalVariables) => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    createAnimal({ variables: values });
+  };
 
   return (
     <Space
@@ -30,7 +64,26 @@ function Create(): JSX.Element {
       <Button icon={<RollbackOutlined />} type="text" href="/">
         Back to list
       </Button>
-      <Form onFinish={onFinish} layout="vertical" wrapperCol={{span: 24}}>
+
+      {(ownersError || createError || errorMessage) && (
+        <Alert
+          message="Error"
+          description={errorMessage || 'Something went wrong...'}
+          type="error"
+          showIcon
+        />
+      )}
+
+      {successMessage && (
+        <Alert
+          message="Success"
+          description={successMessage}
+          type="success"
+          showIcon
+        />
+      )}
+
+      <Form onFinish={onFinish} layout="vertical" wrapperCol={{span: 24}} form={form}>
         <Form.Item
           label="Name"
           name="name"
@@ -60,7 +113,7 @@ function Create(): JSX.Element {
 
         <Form.Item
           label="Owner"
-          name="owner"
+          name="ownerId"
           rules={[{ required: true, message: 'Please select owner!' }]}
         >
           <Select loading={ownersLoading}>
@@ -75,7 +128,12 @@ function Create(): JSX.Element {
         </Form.Item>
 
         <Form.Item style={{textAlign: 'end'}}>
-          <Button type="primary" htmlType="submit" size="large">
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            loading={createLoading}
+          >
             Create
           </Button>
         </Form.Item>
