@@ -1,7 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Button, Table } from 'antd';
+import { Button } from 'antd';
+import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-bootstrap4';
 
 import ANIMALS_LIST from '../../graphql/queries/animalList';
 import { Animals } from '../../graphql/queries/__generated__/Animals';
@@ -16,30 +17,29 @@ function Home(): JSX.Element {
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      name: 'name',
     },
     {
       title: 'Kind',
-      dataIndex: 'kind',
-      key: 'kind',
+      name: 'kind',
     },
     {
       title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      name: 'age',
     },
     {
       title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender',
+      name: 'gender',
     },
   ];
 
   return (
     <div>
       <Button type="primary">Add friend</Button>
-      <Table columns={columns} dataSource={data.animals} />
+      <Grid columns={columns} rows={data.animals}>
+        <Table />
+        <TableHeaderRow />
+      </Grid>
     </div>
   );
 }
