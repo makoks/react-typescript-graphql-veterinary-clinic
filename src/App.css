@@ -1,1 +1,12 @@
 @import '~antd/dist/antd.css';
+
+.ant-layout-header {
+  background-color: #5c60c8;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.ant-layout-content {
+  background-color: #fff;
+  padding: 60px 120px;
+}
