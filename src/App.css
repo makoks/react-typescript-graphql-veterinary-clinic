@@ -1,4 +1,6 @@
 @import '~antd/dist/antd.css';
+@import '~open-iconic/font/css/open-iconic-bootstrap.min.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
 
 .ant-layout-header {
   background-color: #5c60c8;
@@ -15,4 +17,47 @@
 .ant-btn-primary {
   background-color: #5c60c8;
   border-color: #5c60c8;
+}
+
+.ant-layout-content table {
+  background-color: #f1eeee;
+  table-layout: auto;
+}
+
+thead {
+  background-color: #5c60c8;
+  color: #d9daf2;
+  border: none;
+}
+
+tr {
+  border: none;
+}
+
+th {
+  vertical-align: middle;
+  border: none;
+}
+
+th .dx-g-bs4-header-cell-content {
+  justify-content: center;
+}
+
+.dx-g-bs4-banded-cell {
+  text-align: center;
+}
+
+th .text-primary {
+  color: #fff !important;
+}
+
+td {
+  border-top: 1px solid #5c60c8;
+  border-right: 1px solid #5c60c8;
+  padding: 4px;
+  border-bottom: none;
+}
+
+td:last-child {
+  border-right: none;
 }
